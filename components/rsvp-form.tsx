@@ -6,10 +6,17 @@ import { buildIcs } from "@/lib/ics";
 import { submitRsvp } from "@/lib/rsvp";
 import { Arrow } from "./arrow";
 
-type Values = { name: string; email: string; whatsapp: string };
+type Values = { name: string; email: string; whatsapp: string; instagram: string; twitter: string; youtube: string };
 type Errors = Partial<Record<keyof Values, string>>;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+const SOCIALS = [
+  { key: "instagram", label: "Instagram", ph: "@seuusuario", host: /instagram\.com/i },
+  { key: "twitter", label: "Twitter / X", ph: "@seuusuario", host: /(twitter|x)\.com/i },
+  { key: "youtube", label: "YouTube", ph: "@seucanal ou link do canal", host: /youtube\.com|youtu\.be/i },
+] as const;
+const HANDLE_RE = /^@?[A-Za-z0-9._-]{1,50}$/;
 
 function validate(v: Values): Errors {
   const e: Errors = {};
@@ -23,11 +30,17 @@ function validate(v: Values): Errors {
   if (v.whatsapp.trim() && (digits.length < 10 || digits.length > 13)) {
     e.whatsapp = "Digite um WhatsApp válido com DDD, por exemplo (11) 91234-5678.";
   }
+  for (const s of SOCIALS) {
+    const val = v[s.key].trim();
+    if (!val) continue;
+    const ok = /^https?:\/\//i.test(val) ? s.host.test(val) : HANDLE_RE.test(val);
+    if (!ok) e[s.key] = `Informe seu @ ou o link do seu perfil no ${s.label}.`;
+  }
   return e;
 }
 
 export function RsvpForm({ display }: { display: EventDisplay }) {
-  const [values, setValues] = useState<Values>({ name: "", email: "", whatsapp: "" });
+  const [values, setValues] = useState<Values>({ name: "", email: "", whatsapp: "", instagram: "", twitter: "", youtube: "" });
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof Values, boolean>>>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "error" | "success">("idle");
@@ -50,8 +63,8 @@ export function RsvpForm({ display }: { display: EventDisplay }) {
     if (status === "submitting") return;
     const errs = validate(values);
     setErrors(errs);
-    setTouched({ name: true, email: true, whatsapp: true });
-    const first = (["name", "email", "whatsapp"] as const).find((k) => errs[k]);
+    setTouched({ name: true, email: true, whatsapp: true, instagram: true, twitter: true, youtube: true });
+    const first = (["name", "email", "whatsapp", "instagram", "twitter", "youtube"] as const).find((k) => errs[k]);
     if (first) {
       formRef.current?.querySelector<HTMLInputElement>(`[name="${first}"]`)?.focus();
       return;
@@ -60,6 +73,7 @@ export function RsvpForm({ display }: { display: EventDisplay }) {
     setFormError(null);
     const res = await submitRsvp({
       name: values.name.trim(), email: values.email.trim(), whatsapp: values.whatsapp.trim(),
+      instagram: values.instagram.trim(), twitter: values.twitter.trim(), youtube: values.youtube.trim(),
     });
     if (res.ok) {
       setStatus("success");
@@ -88,7 +102,8 @@ export function RsvpForm({ display }: { display: EventDisplay }) {
     return (
       <div className="success" role="status">
         <h3 className="h-lg" tabIndex={-1} ref={successRef}>Sua presença está confirmada.</h3>
-        <p className="body-s">Reserve esse momento para explorar a economia dos agentes com a gente.</p>
+        <p className="body-s">Você está nessa conversa. Reserve a data e traga suas perguntas sobre trabalho, renda e o nosso lugar na economia dos agentes.</p>
+        <p className="caption">O mundo pós-trabalho: qual será o seu lugar?</p>
         <dl className="facts">
           <div><dt className="caption">Data</dt><dd>{display.date}</dd></div>
           <div><dt className="caption">Horário</dt><dd>{display.time}{display.scheduled ? " · Horário de Brasília" : ""}</dd></div>
@@ -108,6 +123,26 @@ export function RsvpForm({ display }: { display: EventDisplay }) {
         {!display.canAddToCalendar && (
           <p className="hint">A agenda fica disponível quando data, horário e duração da live forem definidos.</p>
         )}
+        {(Object.values(EVENT.social).some(Boolean) || EVENT.blogUrl) && (
+          <div className="follow">
+            {Object.values(EVENT.social).some(Boolean) && (
+              <>
+                <p className="caption">Acompanhe o Autonomous Economy</p>
+                <ul className="follow-links">
+                  {([["youtube", "YouTube"], ["instagram", "Instagram"], ["twitter", "Twitter / X"]] as const).map(([k, label]) =>
+                    EVENT.social[k] ? (
+                      <li key={k}><a className="link" href={EVENT.social[k]!} target="_blank" rel="noopener noreferrer">{label}</a></li>
+                    ) : null)}
+                </ul>
+              </>
+            )}
+            {EVENT.blogUrl && (
+              <a className="btn btn-ghost" href={EVENT.blogUrl} target="_blank" rel="noopener noreferrer">
+                Ler os artigos no blog <Arrow />
+              </a>
+            )}
+          </div>
+        )}
       </div>
     );
   }
@@ -116,7 +151,7 @@ export function RsvpForm({ display }: { display: EventDisplay }) {
   return (
     <form className="form" ref={formRef} onSubmit={onSubmit} noValidate aria-describedby={formError ? "form-error" : undefined}>
       <div className="field">
-        <label htmlFor="f-name">Nome</label>
+        <label htmlFor="f-name">Nome <span className="req" aria-hidden="true">*</span></label>
         <input id="f-name" name="name" className="input" type="text" autoComplete="name" required
           value={values.name} onChange={set("name")} onBlur={blur("name")}
           aria-invalid={!!errors.name} aria-describedby={errors.name ? "f-name-err" : undefined} />
@@ -124,7 +159,7 @@ export function RsvpForm({ display }: { display: EventDisplay }) {
       </div>
 
       <div className="field">
-        <label htmlFor="f-email">E-mail</label>
+        <label htmlFor="f-email">E-mail <span className="req" aria-hidden="true">*</span></label>
         <input id="f-email" name="email" className="input" type="email" inputMode="email" autoComplete="email" required
           value={values.email} onChange={set("email")} onBlur={blur("email")}
           aria-invalid={!!errors.email} aria-describedby={errors.email ? "f-email-err" : undefined} />
@@ -140,11 +175,26 @@ export function RsvpForm({ display }: { display: EventDisplay }) {
         {errors.whatsapp && <p className="error" id="f-wa-err" role="alert">{errors.whatsapp}</p>}
       </div>
 
+      <fieldset className="field socials">
+        <legend>Redes sociais <span className="opt">(opcional — até 3)</span></legend>
+        {SOCIALS.map((s) => (
+          <div key={s.key} className="social-row">
+            <label htmlFor={`f-${s.key}`}>{s.label}</label>
+            <input id={`f-${s.key}`} name={s.key} className="input" type="text" autoComplete="off" autoCapitalize="none" spellCheck={false}
+              placeholder={s.ph} value={values[s.key]} onChange={set(s.key)} onBlur={blur(s.key)}
+              aria-invalid={!!errors[s.key]} aria-describedby={errors[s.key] ? `f-${s.key}-err` : undefined} />
+            {errors[s.key] && <p className="error" id={`f-${s.key}-err`} role="alert">{errors[s.key]}</p>}
+          </div>
+        ))}
+      </fieldset>
+
+      <p className="hint req-note"><span className="req" aria-hidden="true">*</span> Campos obrigatórios</p>
+
       {formError && <p className="error form-error" id="form-error" role="alert">{formError}</p>}
 
       <div className="form-foot">
         <button type="submit" className="btn" disabled={busy} aria-busy={busy}>
-          {busy ? "Enviando…" : "Confirmar minha participação"} {!busy && <Arrow />}
+          {busy ? "Enviando…" : "Confirmar minha presença"} {!busy && <Arrow />}
         </button>
         <p className="hint privacy">
           Usamos seus dados apenas para esta live.{" "}

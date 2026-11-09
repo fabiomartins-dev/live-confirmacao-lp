@@ -1,6 +1,6 @@
 import { EVENT } from "./event";
 
-export type RsvpInput = { name: string; email: string; whatsapp: string };
+export type RsvpInput = { name: string; email: string; whatsapp: string; instagram: string; twitter: string; youtube: string };
 
 export type RsvpResult =
   | { ok: true }
@@ -35,6 +35,11 @@ export async function submitRsvp(input: RsvpInput): Promise<RsvpResult> {
         name: input.name,
         email: input.email,
         ...(input.whatsapp ? { whatsapp: input.whatsapp } : {}),
+        social: {
+          ...(input.instagram ? { instagram: input.instagram } : {}),
+          ...(input.twitter ? { twitter: input.twitter } : {}),
+          ...(input.youtube ? { youtube: input.youtube } : {}),
+        },
         event: EVENT.title,
         source: "landing-page",
         submittedAt: new Date().toISOString(),

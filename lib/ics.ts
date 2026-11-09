@@ -14,7 +14,7 @@ export function buildIcs(): string | null {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Agent Economy//Live//PT-BR",
+    "PRODID:-//Autonomous Economy//Live//PT-BR",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
     `UID:${utc(start)}-agent-economy@live`,
@@ -22,7 +22,7 @@ export function buildIcs(): string | null {
     `DTSTART:${utc(start)}`,
     `DTEND:${utc(end)}`,
     `SUMMARY:${esc(EVENT.title)}`,
-    `DESCRIPTION:${esc(EVENT.streamUrl ? `Acesso: ${EVENT.streamUrl}` : "Conversa ao vivo sobre a economia dos agentes.")}`,
+    `DESCRIPTION:${esc(EVENT.streamUrl ? `Acesso: ${EVENT.streamUrl}` : "Autonomous Economy: uma conversa ao vivo sobre trabalho, renda e o nosso lugar na economia dos agentes.")}`,
     ...(EVENT.streamUrl ? [`URL:${EVENT.streamUrl}`, `LOCATION:${esc(EVENT.platform ?? EVENT.streamUrl)}`] : EVENT.platform ? [`LOCATION:${esc(EVENT.platform)}`] : []),
     "END:VEVENT",
     "END:VCALENDAR",

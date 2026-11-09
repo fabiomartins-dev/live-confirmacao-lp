@@ -6,7 +6,7 @@
  */
 export const EVENT = {
   /** Título da live. */
-  title: "Autonomous Economy — encontro ao vivo",
+  title: "O mundo pós-trabalho: qual será o seu lugar?",
 
   /**
    * Início da live em ISO 8601 COM offset de Brasília, ex.: "2026-12-10T19:00:00-03:00".
@@ -33,7 +33,15 @@ export const EVENT = {
    * Endpoint de inscrição (POST, JSON). Veja `lib/rsvp.ts` para o contrato.
    * Enquanto for `null`, o formulário NÃO simula inscrição: informa que ainda não está aberto.
    */
-  rsvpEndpoint: null as string | null,
+  rsvpEndpoint: (process.env.NEXT_PUBLIC_RSVP_WEBHOOK_URL || null) as string | null,
+
+  /** Nossas redes e blog (tela de obrigado). Sem valor, o link não aparece. */
+  social: {
+    youtube: null as string | null,
+    instagram: null as string | null,
+    twitter: null as string | null,
+  },
+  blogUrl: null as string | null,
 
   /** Link da política de privacidade. */
   privacyUrl: null as string | null,

@@ -4,10 +4,15 @@ import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 
+const TITLE = "O mundo pós-trabalho: qual será o seu lugar? | Autonomous Economy";
+const DESCRIPTION =
+  "Participe da live do Autonomous Economy sobre como os agentes de IA podem transformar o trabalho, a renda e os negócios. Confirme sua presença.";
+
 export const metadata: Metadata = {
-  title: "Agent Economy — encontro ao vivo",
-  description:
-    "Uma conversa sobre como os agentes de inteligência artificial podem transformar o trabalho, os negócios e a criação de valor. Confirme sua presença.",
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: { title: TITLE, description: DESCRIPTION, type: "website", locale: "pt_BR", siteName: "Autonomous Economy" },
+  twitter: { card: "summary", title: TITLE, description: DESCRIPTION },
 };
 
 export const viewport: Viewport = { themeColor: "#F6F5F0" };
