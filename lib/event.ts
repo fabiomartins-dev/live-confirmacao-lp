@@ -20,11 +20,11 @@ export const EVENT = {
   /** Duração em minutos (necessária para gerar o compromisso na agenda). */
   durationMinutes: 60 as number | null,
 
-  /** Plataforma da transmissão, ex.: "YouTube", "Zoom". */
-  platform: "YouTube" as string | null,
+  /** Plataforma da transmissão, ex.: "Google Meet", "Zoom". */
+  platform: "Google Meet" as string | null,
 
   /** Link de acesso à transmissão (entra na descrição do compromisso da agenda). */
-  streamUrl: "https://www.youtube.com/channel/UC6_IcFW6_snFedexDeG-KTA" as string | null,
+  streamUrl: "https://meet.google.com/yek-ohpc-kee" as string | null,
 
   /** Link do WhatsApp para lembretes (ex.: canal/comunidade). Sem ele, o botão não aparece. */
   whatsappUrl: null as string | null,
@@ -53,7 +53,7 @@ export const EVENT = {
 export const PLACEHOLDER = {
   date: "09/11/2026",
   time: "20:00",
-  platform: "Youtube",
+  platform: "Google Meet",
   contact: "economyagent@gmail.com",
   privacy: "[POLÍTICA DE PRIVACIDADE]",
 } as const;

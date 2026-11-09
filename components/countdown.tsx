@@ -30,7 +30,7 @@ export function Countdown() {
       <>
         <span className="cd-label"><span className="cd-dot" aria-hidden="true" /> Ao vivo agora</span>
         {EVENT.streamUrl && (
-          <a className="cd-link" href={EVENT.streamUrl} target="_blank" rel="noopener noreferrer">Assistir no YouTube</a>
+          <a className="cd-link" href={EVENT.streamUrl} target="_blank" rel="noopener noreferrer">Entrar no Google Meet</a>
         )}
       </>
     );
