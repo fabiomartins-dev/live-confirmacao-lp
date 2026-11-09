@@ -1,4 +1,5 @@
 import { Arrow } from "@/components/arrow";
+import { Countdown } from "@/components/countdown";
 import { GridLines } from "@/components/grid-lines";
 import { Header } from "@/components/header";
 import { HLine, MaskLines, Reveal } from "@/components/motion";
@@ -27,6 +28,7 @@ export default function Home() {
   return (
     <div className="page">
       <div className="page-grid" aria-hidden="true"><GridLines /></div>
+      <Countdown />
       <Header />
 
       <main>

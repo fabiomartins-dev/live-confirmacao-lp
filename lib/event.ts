@@ -12,19 +12,19 @@ export const EVENT = {
    * Início da live em ISO 8601 COM offset de Brasília, ex.: "2026-12-10T19:00:00-03:00".
    * Enquanto for `null`, a página mostra [DATA] / [HORÁRIO] e o botão de agenda fica indisponível.
    */
-  startsAt: null as string | null,
+  startsAt: "2026-11-09T20:00:00-03:00" as string | null,
 
   /** Fuso usado para exibir data e horário. */
   timezone: "America/Sao_Paulo",
 
   /** Duração em minutos (necessária para gerar o compromisso na agenda). */
-  durationMinutes: null as number | null,
+  durationMinutes: 60 as number | null,
 
   /** Plataforma da transmissão, ex.: "YouTube", "Zoom". */
-  platform: null as string | null,
+  platform: "YouTube" as string | null,
 
   /** Link de acesso à transmissão (entra na descrição do compromisso da agenda). */
-  streamUrl: null as string | null,
+  streamUrl: "https://www.youtube.com/channel/UC6_IcFW6_snFedexDeG-KTA" as string | null,
 
   /** Link do WhatsApp para lembretes (ex.: canal/comunidade). Sem ele, o botão não aparece. */
   whatsappUrl: null as string | null,
@@ -37,7 +37,7 @@ export const EVENT = {
 
   /** Nossas redes e blog (tela de obrigado). Sem valor, o link não aparece. */
   social: {
-    youtube: null as string | null,
+    youtube: "https://www.youtube.com/channel/UC6_IcFW6_snFedexDeG-KTA" as string | null,
     instagram: null as string | null,
     twitter: null as string | null,
   },
