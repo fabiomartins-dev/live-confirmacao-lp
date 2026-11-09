@@ -34,7 +34,7 @@ export default function Home() {
         <section className="hero" id="topo" aria-labelledby="hero-title">
           <div className="frame cols hero-grid">
             <div className="cell cell-2 hero-main">
-              <Reveal immediate delay={0.25}><p className="caption">AUTONOMOUS ECONOMY / ENCONTRO AO VIVO</p></Reveal>
+              <Reveal immediate delay={0.25}><p className="caption">AE / ENCONTRO AO VIVO</p></Reveal>
               <MaskLines as="h1" id="hero-title" className="display hero-title" immediate delay={0.35} stagger={0.12} y={24}
                 lines={["O mundo pós-trabalho:", "qual será o seu lugar?"]} />
             </div>

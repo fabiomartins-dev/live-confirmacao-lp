@@ -26,7 +26,7 @@ export function Header() {
         <a className="brand" href="#topo" aria-label="Autonomous Economy — início">Autonomous Economy</a>
         <nav className="header-nav" aria-label="Principal">
           <a className="link nav-link" href="#conversa">A conversa</a>
-          <a className="btn btn-sm" href="#confirmar">Confirmar presença</a>
+          <a className="btn btn-sm" href="#confirmar">Confirmar</a>
         </nav>
       </div>
     </motion.header>
