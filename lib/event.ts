@@ -55,6 +55,7 @@ export const PLACEHOLDER = {
   time: "20:00",
   platform: "Youtube",
   contact: "economyagent@gmail.com",
+  privacy: "[POLÍTICA DE PRIVACIDADE]",
 } as const;
 
 function parsedStart(): Date | null {

@@ -10,7 +10,7 @@ export type RsvpResult =
  * ============================ PONTO DE INTEGRAÇÃO ============================
  * Envia a inscrição para `EVENT.rsvpEndpoint` (POST, application/json):
  *
- *   { name, email, whatsapp?, event, source: "landing-page", submittedAt }
+ *   { nome, email, whatsapp, instagram, youtube, twitter } (strings; vazio quando não informado)
  *
  * Contrato esperado: qualquer resposta 2xx significa "inscrição registrada".
  * Só nesse caso a interface mostra o estado de sucesso. O front-end NÃO afirma
@@ -19,6 +19,13 @@ export type RsvpResult =
  * Sem endpoint configurado, nada é enviado e nenhuma inscrição é simulada.
  * ==============================================================================
  */
+/** "(11) 91234-5678" -> "+5511912345678". Vazio continua vazio. */
+function toE164(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (!digits) return "";
+  return `+${digits.length <= 11 ? `55${digits}` : digits}`;
+}
+
 export async function submitRsvp(input: RsvpInput): Promise<RsvpResult> {
   if (!EVENT.rsvpEndpoint) {
     return {
@@ -32,17 +39,12 @@ export async function submitRsvp(input: RsvpInput): Promise<RsvpResult> {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: input.name,
+        nome: input.name,
         email: input.email,
-        ...(input.whatsapp ? { whatsapp: input.whatsapp } : {}),
-        social: {
-          ...(input.instagram ? { instagram: input.instagram } : {}),
-          ...(input.twitter ? { twitter: input.twitter } : {}),
-          ...(input.youtube ? { youtube: input.youtube } : {}),
-        },
-        event: EVENT.title,
-        source: "landing-page",
-        submittedAt: new Date().toISOString(),
+        whatsapp: toE164(input.whatsapp),
+        instagram: input.instagram,
+        youtube: input.youtube,
+        twitter: input.twitter,
       }),
     });
     if (!res.ok) {
